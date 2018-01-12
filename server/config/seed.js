@@ -25,16 +25,6 @@ export default function seedDatabaseIfNeeded() {
               urlRepositorio: "https://gitlab.geo.gob.bo",
               descripcion: "gitlab"
             },
-            {
-              nombre: "Gitlab",
-              urlRepositorio: "https://about.gitlab.com",
-              descripcion: "gitlab"
-            },
-            {
-              nombre: "GitHub",
-              urlRepositorio: "https://github.com",
-              descripcion: "github"
-            }
           ],
           {
             returning: true
@@ -52,28 +42,13 @@ export default function seedDatabaseIfNeeded() {
         return Persona.bulkCreate(
           [
             {
-              nombre: "directora_nombre",
-              cargo : "directora",
-              fecha_nacimiento: "1",
-              salario_hora:""
-            },
-            {
-              nombre: "gerenta_nombre",
-              cargo : "gerenta",
-              fecha_nacimiento: "1",
-              salario_hora:""
-            },
-            {
-              nombre: "administrativas_nombre",
-              cargo : "administrativa",
-              fecha_nacimiento: "1",
-              salario_hora:""
-            },
-            {
-              nombre: "cajera_nombre",
-              cargo : "cajera",
-              fecha_nacimiento: "1",
-              salario_hora:""
+              nombre: "paul sanchez",
+              email : "paulpsan@gamil.com",
+              reserva:{
+                sala:"primera_sala",
+                fecha:"25/01/2018",
+                hora:"20:00"
+              }
             },
           ],
           {

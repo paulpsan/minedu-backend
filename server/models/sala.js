@@ -11,30 +11,17 @@ export default function (sequelize, DataTypes) {
     nombre: {
       allowNull: false,
       type: DataTypes.TEXT,
-      validate: {
-        notEmpty: {
-          msg: 'Ingrese el nombre del proyecto'
-        }
-      }
-    },
-    urlRepositorio: {
-      allowNull: false,
-      type: DataTypes.TEXT,
-      validate: {
-        notEmpty: {
-          msg: 'Ingrese la url del repositorio del proyecto'
-        }
-      }
     },
     descripcion: {
       type: DataTypes.TEXT,
     },
-    datos: {
-      type: DataTypes.JSONB
+    reserva: {
+      type: DataTypes.JSONB,
+      defaultValue:[{
+        usuario: "",
+        fecha: "",
+        hora: "",
+      }]
     }
-  }, {
-    tableName: 'proyecto',
-    createdAt: 'fecha_creacion',
-    updatedAt: 'fecha_modificacion'
   });
 }

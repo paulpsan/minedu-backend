@@ -11,28 +11,17 @@ export default function(sequelize, DataType) {
       type: DataType.STRING(100),
       allowNulll: false
     },
-    cargo: {
+    email: {
       type: DataType.STRING(100),
       allowNulll: false
     },
-    salario_hora: {
-      type: DataType.INTEGER,
-      allowNulll: false
-    },
-    salario_mes: {
-        type: DataType.INTEGER,
-        allowNulll: false
-      },
-
-    fecha_nacimiento: {
-      type: DataType.DATE,
-      allowNulll: false
+    reserva: {
+      type: DataType.JSONB,
+      defaultValue:{
+          sala: "",
+          fecha: "",
+          hora: "",
+        }
     }
   });
-  //   persona.associate = models => {
-  //     persona.hasMany(models.hobbie, {
-  //       as: "hobbies",
-  //       foreignKey: { name: "fid_persona", allowNull: false }
-  //     });
-  //   };
 }

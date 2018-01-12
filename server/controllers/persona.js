@@ -1,15 +1,12 @@
 "use strict";
 import jsonpatch from "fast-json-patch";
 import { Persona } from "../sqldb";
-import SequelizeHelper from "../components/sequelize-helper";
-import ProxyService from "../components/repository-proxy/proxy-service";
-import GitLab from "../components/repository-proxy/repositories/gitlab";
-import _ from "lodash";
-import { createSecureContext } from "tls";
+
+
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
   return function(entity) {
-    if (entity) {
+    if(entity) {
       return res.status(statusCode).json(entity);
     }
     return null;
@@ -20,7 +17,7 @@ function patchUpdates(patches) {
   return function(entity) {
     try {
       jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch (err) {
+    } catch(err) {
       return Promise.reject(err);
     }
 
@@ -30,17 +27,18 @@ function patchUpdates(patches) {
 
 function removeEntity(res) {
   return function(entity) {
-    if (entity) {
-      return entity.destroy().then(() => {
-        res.status(204).end();
-      });
+    if(entity) {
+      return entity.destroy()
+        .then(() => {
+          res.status(204).end();
+        });
     }
   };
 }
 
 function handleEntityNotFound(res) {
   return function(entity) {
-    if (!entity) {
+    if(!entity) {
       res.status(404).end();
       return null;
     }
@@ -56,31 +54,68 @@ function handleError(res, statusCode) {
 }
 
 export function index(req, res) {
-  return Persona.findAndCountAll(req.opciones)
-    .then(datos => {
-      console.log(datos);
-      return datos;
-    })
+  return Persona.findAll()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
+// Gets a single Persona from the DB
+export function show(req, res) {
+  return Persona.find({
+    where: {
+      _id: req.params.id
+    }
+  })
+    .then(handleEntityNotFound(res))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Creates a new Persona in the DB
 export function create(req, res) {
-  console.log(req.body);
-  if (req.body.cargo == "cajera") {
-    req.body.salario_hora = 20;
-    req.body.salario_mes=20*8*25
-    //8horas por dia 25 dias habiles cajeras y gerentas
-  } else if (req.body.cargo == "administrativa") {
-    req.body.salario_hora = 28;
-    req.body.salario_mes=28*8*20
-  } else if (req.body.cargo == "gerenta") {
-    req.body.salario_hora = 40;
-    req.body.salario_mes=40*8*25
-  } else if (req.body.cargo == "directora") {
-    req.body.salario_hora = 80;
-    req.body.salario_mes=80*8*20
-  }
   return Persona.create(req.body)
     .then(respondWithResult(res, 201))
+    .catch(handleError(res));
+}
+
+// Upserts the given Persona in the DB at the specified ID
+export function upsert(req, res) {
+  if(req.body._id) {
+    delete req.body._id;
+  }
+
+  return Persona.upsert(req.body, {
+    where: {
+      _id: req.params.id
+    }
+  })
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Updates an existing Persona in the DB
+export function patch(req, res) {
+  if(req.body._id) {
+    delete req.body._id;
+  }
+  return Persona.find({
+    where: {
+      _id: req.params.id
+    }
+  })
+    .then(handleEntityNotFound(res))
+    .then(patchUpdates(req.body))
+    .then(respondWithResult(res))
+    .catch(handleError(res));
+}
+
+// Deletes a Persona from the DB
+export function destroy(req, res) {
+  return Persona.find({
+    where: {
+      _id: req.params.id
+    }
+  })
+    .then(handleEntityNotFound(res))
+    .then(removeEntity(res))
     .catch(handleError(res));
 }
