@@ -7,7 +7,7 @@ module.exports = {
 
   // Sequelize connection opions
   sequelize: {
-    uri: 'postgresql://postgres:postgres@localhost/hackday',
+    uri: 'postgresql://postgres:postgres@localhost/reclamos',
     options: {
     }
   },
