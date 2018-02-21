@@ -60,7 +60,7 @@ function handleError(res, statusCode) {
 
 // Gets a list of reclamos
 export function index(req, res) {
-  return Reclamo.findAll({ include: [{ model: Usuario, as: "Usuario" }] })
+  return Reclamo.findAll({ include: [{ model: Usuario, as: "Usuario" }],order: [["_id",'desc']] })
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
