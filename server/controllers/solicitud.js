@@ -74,7 +74,7 @@ export function show(req, res) {
     include: [{ model: Tipologia, as: "Tipologia" }],
     where: {
       _id: req.params.id
-    }
+    } 
   })
     .then(handleEntityNotFound(res))
     .then(respondWithResult(res))

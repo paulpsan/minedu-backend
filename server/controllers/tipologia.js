@@ -33,7 +33,7 @@ function removeEntity(res) {
 
 function handleEntityNotFound(res) {
   return function(entity) {
-    console.log(entity);
+    console.log("entidad",entity);
     if(!entity) {
       res.status(404).end();
       return null;

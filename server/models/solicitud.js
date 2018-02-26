@@ -8,11 +8,11 @@ export default function(sequelize, DataTypes) {
       autoIncrement: true
     },
     nombre: {
-      type: DataTypes.STRING(100),
+      type: DataTypes.STRING,
       allowNulll: false
     },
     descripcion: {
-      type: DataTypes.STRING(200),
+      type: DataTypes.STRING(1000),
       allowNulll: false
     }
   });
