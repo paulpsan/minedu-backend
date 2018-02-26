@@ -1,12 +1,13 @@
 'use strict';
 
 var express = require('express');
-var controller = require("../controllers/reserva");
+var controller = require("../controllers/solicitud");
 
 var router = express.Router();
 
 router.get('/', controller.index);
 router.get('/:id', controller.show);
+router.get("/:id/tipologias", controller.showTipologias);
 router.post('/', controller.create);
 router.put('/:id', controller.update);
 router.patch('/:id', controller.update);

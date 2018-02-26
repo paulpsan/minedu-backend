@@ -1,6 +1,6 @@
 "use strict";
-import jsonpatch from "fast-json-patch";
-import { Sala } from "../sqldb";
+import { Tipologia } from "../sqldb";
+
 
 function respondWithResult(res, statusCode) {
   statusCode = statusCode || 200;
@@ -12,15 +12,11 @@ function respondWithResult(res, statusCode) {
   };
 }
 
-function patchUpdates(patches) {
+function saveUpdates(updates) {
   return function(entity) {
-    try {
-      jsonpatch.apply(entity, patches, /*validate*/ true);
-    } catch(err) {
-      return Promise.reject(err);
-    }
-
-    return entity.save();
+    return entity.updateAttributes(updates).then(updated => {
+      return updated;
+    });
   };
 }
 
@@ -37,6 +33,7 @@ function removeEntity(res) {
 
 function handleEntityNotFound(res) {
   return function(entity) {
+    console.log(entity);
     if(!entity) {
       res.status(404).end();
       return null;
@@ -46,20 +43,22 @@ function handleEntityNotFound(res) {
 }
 
 function handleError(res, statusCode) {
+  console.log("por que",res);
   statusCode = statusCode || 500;
+  
   return function(err) {
     res.status(statusCode).send(err);
   };
 }
 
 export function index(req, res) {
-  return Sala.findAll()
+  return Tipologia.findAll()
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
-// Gets a single Sala from the DB
+// Gets a single Tipologia from the DB
 export function show(req, res) {
-  return Sala.find({
+  return Tipologia.find({
     where: {
       _id: req.params.id
     }
@@ -69,47 +68,47 @@ export function show(req, res) {
     .catch(handleError(res));
 }
 
-// Creates a new Sala in the DB
+// Creates a new Tipologia in the DB
 export function create(req, res) {
-  return Sala.create(req.body)
+  console.log("obj",req.body);
+  return Tipologia.create(req.body)
     .then(respondWithResult(res, 201))
     .catch(handleError(res));
 }
 
-// Upserts the given Sala in the DB at the specified ID
-export function upsert(req, res) {
-  if(req.body._id) {
+// Upserts the given Tipologia in the DB at the specified ID
+// export function upsert(req, res) {
+//   if(req.body._id) {
+//     delete req.body._id;
+//   }
+
+//   return Tipologia.upsert(req.body, {
+//     where: {
+//       _id: req.params.id
+//     }
+//   })
+//     .then(respondWithResult(res))
+//     .catch(handleError(res));
+// }
+
+// Updates an existing Reclamo in the DB
+export function update(req, res) {
+  if (req.body._id) {
     delete req.body._id;
   }
-
-  return Sala.upsert(req.body, {
-    where: {
-      _id: req.params.id
-    }
-  })
-    .then(respondWithResult(res))
-    .catch(handleError(res));
-}
-
-// Updates an existing Sala in the DB
-export function patch(req, res) {
-  if(req.body._id) {
-    delete req.body._id;
-  }
-  return Sala.find({
+  return Tipologia.find({
     where: {
       _id: req.params.id
     }
   })
     .then(handleEntityNotFound(res))
-    .then(patchUpdates(req.body))
+    .then(saveUpdates(req.body))
     .then(respondWithResult(res))
     .catch(handleError(res));
 }
-
-// Deletes a Sala from the DB
+// Deletes a Tipologia from the DB
 export function destroy(req, res) {
-  return Sala.find({
+  return Tipologia.find({
     where: {
       _id: req.params.id
     }

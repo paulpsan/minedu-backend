@@ -6,8 +6,8 @@ let db = {
   Sequelize,
   sequelize: new Sequelize(config.sequelize.uri, config.sequelize.options)
 };
-db.Sala = db.sequelize.import("../models/sala");
-db.Persona = db.sequelize.import("../models/persona");
+db.Solicitud = db.sequelize.import("../models/solicitud");
+db.Tipologia = db.sequelize.import("../models/tipologia");
 
 db.Usuario = db.sequelize.import("../models/usuario");
 db.Thing = db.sequelize.import("../models/thing");
@@ -25,6 +25,14 @@ db.Reclamo.belongsTo(db.Usuario, {
     allowNull: false
   },
   as: "Usuario"
+});
+
+db.Solicitud.belongsTo(db.Tipologia, {
+  foreignKey: {
+    name: "fk_tipologia",
+    allowNull: false
+  },
+  as: "Tipologia"
 });
 
 module.exports = db;
